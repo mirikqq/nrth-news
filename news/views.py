@@ -2,6 +2,7 @@ import json
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Count
+from django.utils.timezone import localtime
 from .models import News, Visitor
 
 
@@ -60,7 +61,7 @@ def visitors_api(request):
             'country': v['country'],
             'lat': v['latitude'],
             'lon': v['longitude'],
-            'visited_at': v['visited_at'].strftime('%d.%m.%Y %H:%M'),
+            'visited_at': localtime(v['visited_at']).strftime('%d.%m.%Y %H:%M'),
         })
 
     return JsonResponse({'visitors': data, 'count': len(data)})
