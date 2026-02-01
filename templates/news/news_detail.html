@@ -1,0 +1,178 @@
+{% extends "news/base.html" %}
+
+{% block title %}{{ news.title }}{% endblock %}
+
+{% block extra_styles %}
+    .article-layout {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 80px 24px 60px;
+    }
+
+    .article-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        transition: color var(--transition), gap var(--transition);
+        margin-bottom: 48px;
+    }
+
+    .article-back:hover {
+        color: var(--accent);
+        gap: 12px;
+    }
+
+    .article-hero {
+        width: 100%;
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin-bottom: 48px;
+        position: relative;
+    }
+
+    .article-hero img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .article-hero__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .article-meta {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .article-meta__date {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .article-meta__date::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+    }
+
+    .article-meta__divider {
+        width: 1px;
+        height: 16px;
+        background: var(--border-light);
+    }
+
+    .article-meta__tag {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        background: var(--accent-dim);
+        padding: 4px 10px;
+        border-radius: 2px;
+    }
+
+    .article-title {
+        font-family: var(--font-display);
+        font-size: clamp(28px, 4vw, 42px);
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--text-primary);
+        letter-spacing: -0.5px;
+        margin-bottom: 24px;
+    }
+
+    .article-excerpt {
+        font-size: 17px;
+        color: var(--text-secondary);
+        line-height: 1.8;
+        border-left: 2px solid var(--accent);
+        padding-left: 20px;
+        margin-bottom: 40px;
+        font-style: italic;
+    }
+
+    .article-divider {
+        width: 48px;
+        height: 1px;
+        background: var(--accent);
+        margin-bottom: 40px;
+    }
+
+    .article-body {
+        font-size: 15px;
+        line-height: 1.9;
+        color: var(--text-secondary);
+    }
+
+    .article-body p {
+        margin-bottom: 20px;
+    }
+
+    .article-body p:first-of-type::first-letter {
+        font-family: var(--font-display);
+        font-size: 56px;
+        font-weight: 700;
+        float: left;
+        line-height: 0.85;
+        margin-right: 12px;
+        margin-top: 4px;
+        color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+        .article-layout { padding: 60px 16px 48px; }
+        .article-hero img { height: 240px; }
+    }
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="article-layout">
+        <a href="{% url 'news:news_list' %}" class="article-back">← Все новости</a>
+
+        {% if news.photo %}
+        <div class="article-hero">
+            <img src="{{ news.photo.url }}" alt="{{ news.title }}">
+            <div class="article-hero__overlay"></div>
+        </div>
+        {% endif %}
+
+        <div class="article-meta">
+            <span class="article-meta__date">{{ news.pub_date|date:"d M Y" }}</span>
+            <div class="article-meta__divider"></div>
+            <span class="article-meta__tag">Новость</span>
+        </div>
+
+        <h1 class="article-title">{{ news.title }}</h1>
+
+        <p class="article-excerpt">{{ news.short_description }}</p>
+
+        <div class="article-divider"></div>
+
+        <div class="article-body">
+            {{ news.full_description|linebreaks }}
+        </div>
+    </div>
+</div>
+{% endblock %}
